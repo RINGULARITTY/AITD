@@ -40,8 +40,6 @@ int main() {
         }}
     );
 
-    int a = 10, b = 20;
-
     sf::Clock deltaClock;
     while (window.isOpen()) {
         sf::Event event;

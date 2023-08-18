@@ -29,7 +29,7 @@ public:
         else
             ImGui::Text(("current_time : " + std::to_string(timer.getElapsedTime().asSeconds())).c_str());
         ImGui::Text(("instantiated_enemies : " + std::to_string(renderEnemies.size())).c_str());
-        ImGui::SliderInt("current_enemy", &currentEnemy, 0, enemies.size());
+        ImGui::SliderInt("current_enemy", &currentEnemy, 0, static_cast<int>(enemies.size()));
         if (ImGui::TreeNode("enemies")) {
             float maxSpawnTime = *max_element(std::begin(spawnTimes), std::end(spawnTimes));
             for (int i = 0; i < enemies.size(); ++i) {

@@ -26,7 +26,7 @@ public:
         }
 
         if (ImGui::TreeNode(("waves (" + std::to_string(waves.size()) + ")").c_str())) {
-            ImGui::SliderInt("current_wave", &currentWave, 0, waves.size());
+            ImGui::SliderInt("current_wave", &currentWave, 0, static_cast<int>(waves.size()));
             for (int i = 0; i < waves.size(); ++i) {
                 if (ImGui::TreeNode(std::to_string(i).c_str())) {
                     waves[currentWave].debugImGUI();

@@ -15,7 +15,7 @@ public:
         yPos{ yPos } {}
 
     void debugImGUI() {
-        ImGui::SliderFloat("pv", &currentHealth, 0, health);
+        ImGui::SliderFloat("hp", &currentHealth, 0, health);
         ImGui::SliderFloat("x", &xPos, 0, 20);
         ImGui::SliderFloat("y", &yPos, 0, 10);
     }
