@@ -10,7 +10,7 @@ public:
     Waypoint(int& x, int& y):
         x{ x },
         y{ y },
-        renderElement(5) {
+        renderElement(3) {
         renderElement.setOrigin(sf::Vector2f(5, 5));
         renderElement.setFillColor(sf::Color(255, 150, 0, 200));
     }

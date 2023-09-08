@@ -12,30 +12,34 @@ public:
         currentEnemy{},
         enemies{ enemies },
         spawnTimes{ spawnTimes },
-        renderEnemies{} {}
+        instancedEnemies{} {}
 
-    void start() {
+    void start(const Waypoint& startPoint) {
+        for (Enemy& e : enemies) {
+            e.xPos = startPoint.x;
+            e.yPos = startPoint.y;
+        }
         currentEnemy = 0;
-        renderEnemies.clear();
+        instancedEnemies.clear();
         started = true;
         timer.restart();
     }
 
-    void debugImGUI() {
+    void debugImGUI(const Waypoint& startPoint) {
         if (ImGui::Button("Start"))
-            start();
+            start(startPoint);
         if (!started)
             ImGui::Text(("current_time : 0"));
         else
             ImGui::Text(("current_time : " + std::to_string(timer.getElapsedTime().asSeconds())).c_str());
-        ImGui::Text(("instantiated_enemies : " + std::to_string(renderEnemies.size())).c_str());
+        ImGui::Text(("instantiated_enemies : " + std::to_string(instancedEnemies.size())).c_str());
         ImGui::SliderInt("current_enemy", &currentEnemy, 0, static_cast<int>(enemies.size()));
         if (ImGui::TreeNode("enemies")) {
             float maxSpawnTime = *max_element(std::begin(spawnTimes), std::end(spawnTimes));
             for (int i = 0; i < enemies.size(); ++i) {
                 bool isInstantiated = false;
-                for (CircleEnemy& c : renderEnemies) {
-                    if (&c.enemy == &enemies[i]) {
+                for (InstancedEnemy& c : instancedEnemies) {
+                    if (c.getEnemy() == &enemies[i]) {
                         isInstantiated = true;
                         break;
                     }
@@ -50,21 +54,24 @@ public:
         }
     }
 
-    void update() {
+    void update(Map& map) {
         if (!started)
             return;
         for (int i = currentEnemy; i < enemies.size(); ++i) {
             if (spawnTimes[i] <= timer.getElapsedTime().asSeconds()) {
-                renderEnemies.push_back(CircleEnemy(enemies[i]));
+                instancedEnemies.emplace_back(&enemies[i]);
                 currentEnemy++;
             }
         }
 
-        // TODO : Wrapper CircleEnemy dans une classe avec son vecteur direction et l'id du waypoint pour le faire bouger
+        for (int i = 0; i < instancedEnemies.size(); ++i) {
+            if (!instancedEnemies[i].update(map.waypoints))
+                instancedEnemies.erase(instancedEnemies.begin() + i);
+        }
     }
 
     void render(sf::RenderWindow& w) {
-        for (CircleEnemy& c : renderEnemies) {
+        for (InstancedEnemy& c : instancedEnemies) {
             c.render(w);
         }
     }
@@ -75,5 +82,5 @@ public:
     int currentEnemy;
     std::vector<Enemy> enemies;
     std::vector<float> spawnTimes;
-    std::vector<CircleEnemy> renderEnemies;
+    std::vector<InstancedEnemy> instancedEnemies;
 };

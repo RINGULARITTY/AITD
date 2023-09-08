@@ -5,17 +5,28 @@
 
 class GameController {
 public:
-    GameController(const std::vector<Ground>& grounds, const std::vector<Wave>& waves):
+    GameController(const std::vector<Ground>& grounds, const std::vector<Wave>& waves, sf::Int32 systemUpdateDelta) :
         currentWave{},
         waves{ waves },
-        map(grounds) {}
+        map(grounds),
+        updater{},
+        leftUpdate{ 0 },
+        systemUpdateDelta{ systemUpdateDelta } {}
 
     void start() {
-        waves[currentWave].start();
+        waves[currentWave].start(map.waypoints[0]);
+        updater.restart();
     }
 
     void update() {
-        waves[currentWave].update();
+        leftUpdate += updater.getElapsedTime().asMilliseconds();
+        if (leftUpdate >= systemUpdateDelta) {
+            updater.restart();
+            while (leftUpdate >= systemUpdateDelta) {
+                waves[currentWave].update(map);
+                leftUpdate -= systemUpdateDelta;
+            }
+        }
     }
 
 
@@ -29,7 +40,7 @@ public:
             ImGui::SliderInt("current_wave", &currentWave, 0, static_cast<int>(waves.size()));
             for (int i = 0; i < waves.size(); ++i) {
                 if (ImGui::TreeNode(std::to_string(i).c_str())) {
-                    waves[currentWave].debugImGUI();
+                    waves[currentWave].debugImGUI(map.waypoints[0]);
                     ImGui::TreePop();
                 }
             }
@@ -45,4 +56,7 @@ public:
     int currentWave;
     std::vector<Wave> waves;
     Map map;
+    sf::Clock updater;
+    sf::Int32 leftUpdate;
+    sf::Int32 systemUpdateDelta;
 };
