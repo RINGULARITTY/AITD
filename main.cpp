@@ -1,6 +1,13 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
-#include "gameController.hpp"
+
+#include "systemManager.hpp"
+#include "entityManager.hpp"
+#include "componentManager.hpp"
+#include "components.hpp"
+#include "archerTower.hpp"
+#include "towerRenderSystem.hpp"
+
 
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -8,78 +15,27 @@
 #include <SFML/Window/Event.hpp>
 
 int main() {
+    sf::Uint32 SYSTEM_FPS = 30;
+    sf::Uint32 left_update_time = 0;
+
+    EntityManager entityManager;
+    ComponentManager<PositionComponent> positionComponentManager;
+    ComponentManager<DamageComponent> damageComponentManager;
+    ComponentManager<RangeComponent> rangeComponentManager;
+    ComponentManager<TowerRenderComponent> renderManager;
+
+    ArcherTower archerTower(entityManager, positionComponentManager, damageComponentManager, rangeComponentManager);
+    archerTower.InitializeTower();
+
     sf::RenderWindow window(sf::VideoMode(1600, 900), "AITD");
     window.setFramerateLimit(60);
 
+    SystemManager systemManager;
+    systemManager.AddSystem<TowerRenderSystem>(positionComponentManager, renderManager, window);
+
+    sf::Clock clock;
+
     ImGui::SFML::Init(window);
-
-    GameController gc(
-        std::vector<Ground> {{
-            Ground(Ground::Type::START, sf::Vector2f(1, 1)),
-            Ground(Ground::Type::WAY, sf::Vector2f(1, 2)),
-            Ground(Ground::Type::WAY, sf::Vector2f(2, 2)),
-            Ground(Ground::Type::WAY, sf::Vector2f(3, 2)),
-            Ground(Ground::Type::WAY, sf::Vector2f(3, 1)),
-            Ground(Ground::Type::WAY, sf::Vector2f(4, 1)),
-            Ground(Ground::Type::WAY, sf::Vector2f(5, 1)),
-            Ground(Ground::Type::WAY, sf::Vector2f(6, 1)),
-            Ground(Ground::Type::WAY, sf::Vector2f(7, 1)),
-            Ground(Ground::Type::WAY, sf::Vector2f(8, 1)),
-            Ground(Ground::Type::WAY, sf::Vector2f(9, 1)),
-            Ground(Ground::Type::WAY, sf::Vector2f(10, 1)),
-            Ground(Ground::Type::WAY, sf::Vector2f(11, 1)),
-            Ground(Ground::Type::WAY, sf::Vector2f(12, 1)),
-            Ground(Ground::Type::WAY, sf::Vector2f(13, 1)),
-            Ground(Ground::Type::WAY, sf::Vector2f(14, 1)),
-            Ground(Ground::Type::WAY, sf::Vector2f(15, 1)),
-            Ground(Ground::Type::WAY, sf::Vector2f(16, 1)),
-            Ground(Ground::Type::WAY, sf::Vector2f(17, 1)),
-            Ground(Ground::Type::WAY, sf::Vector2f(18, 1)),
-            Ground(Ground::Type::WAY, sf::Vector2f(18, 2)),
-            Ground(Ground::Type::WAY, sf::Vector2f(18, 3)),
-            Ground(Ground::Type::WAY, sf::Vector2f(18, 4)),
-            Ground(Ground::Type::WAY, sf::Vector2f(17, 4)),
-            Ground(Ground::Type::WAY, sf::Vector2f(16, 4)),
-            Ground(Ground::Type::WAY, sf::Vector2f(15, 4)),
-            Ground(Ground::Type::WAY, sf::Vector2f(14, 4)),
-            Ground(Ground::Type::WAY, sf::Vector2f(13, 4)),
-            Ground(Ground::Type::WAY, sf::Vector2f(12, 4)),
-            Ground(Ground::Type::WAY, sf::Vector2f(11, 4)),
-            Ground(Ground::Type::WAY, sf::Vector2f(10, 4)),
-            Ground(Ground::Type::WAY, sf::Vector2f(9, 4)),
-            Ground(Ground::Type::WAY, sf::Vector2f(9, 5)),
-            Ground(Ground::Type::WAY, sf::Vector2f(9, 6)),
-            Ground(Ground::Type::WAY, sf::Vector2f(9, 7)),
-            Ground(Ground::Type::WAY, sf::Vector2f(9, 8)),
-            Ground(Ground::Type::WAY, sf::Vector2f(9, 9)),
-            Ground(Ground::Type::WAY, sf::Vector2f(8, 9)),
-            Ground(Ground::Type::WAY, sf::Vector2f(7, 9)),
-            Ground(Ground::Type::WAY, sf::Vector2f(7, 8)),
-            Ground(Ground::Type::WAY, sf::Vector2f(7, 7)),
-            Ground(Ground::Type::WAY, sf::Vector2f(7, 6)),
-            Ground(Ground::Type::WAY, sf::Vector2f(7, 5)),
-            Ground(Ground::Type::WAY, sf::Vector2f(6, 5)),
-            Ground(Ground::Type::WAY, sf::Vector2f(5, 5)),
-            Ground(Ground::Type::WAY, sf::Vector2f(5, 4)),
-            Ground(Ground::Type::END, sf::Vector2f(4, 4)),
-
-            Ground(Ground::Type::TOWER, sf::Vector2f(2, 1)),
-        }},
-        std::vector<Wave> {{
-            Wave(
-                std::vector<Enemy> {{
-                    Enemy(100, 1),
-                    Enemy(115, 1)
-                }},
-                
-                std::vector<float> {{
-                    1.5,
-                    2.5
-                }}
-            )
-        }},
-        15
-    );
 
     sf::Clock deltaClock;
     while (window.isOpen()) {
@@ -92,7 +48,15 @@ int main() {
             }
         }
 
-        gc.update();
+        sf::Uint32 timeElapsed = clock.getElapsedTime().asMilliseconds();
+        if (timeElapsed + left_update_time >= 1000 / SYSTEM_FPS) {
+            clock.restart();
+            left_update_time += timeElapsed;
+            while (left_update_time >= 1000 / SYSTEM_FPS) {
+                systemManager.UpdateSystems();
+                left_update_time -= 1000 / SYSTEM_FPS;
+            }
+        }
 
         ImGui::SFML::Update(window, deltaClock.restart());
 
@@ -102,14 +66,18 @@ int main() {
         ImGui::Begin("Settings");
 
         if (ImGui::TreeNode("game_controller")) {
-            gc.debugImGUI();
+            ImGui::TreePop();
+        }
+
+        if (ImGui::TreeNode("interactions")) {
             ImGui::TreePop();
         }
 
         ImGui::End();
 
         window.clear();
-        gc.render(window);
+        systemManager.UpdateRenders();
+        systemManager.Renders();
         ImGui::SFML::Render(window);
         window.display();
     }

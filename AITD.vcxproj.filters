@@ -16,6 +16,12 @@
     <Filter Include="Source Files\imgui">
       <UniqueIdentifier>{4c27895c-643e-43de-82a6-d807cf860bc8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\system">
+      <UniqueIdentifier>{ac792fdb-e585-454f-8e08-f325e7f8d46b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\tower">
+      <UniqueIdentifier>{fe86725d-a27a-47d1-b4d8-d56f9d11dcd4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -35,6 +41,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\Libs\imgui_sfml_src\imgui-SFML.cpp">
       <Filter>Source Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="archerTower.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="entityManger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tower.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -65,23 +80,38 @@
     <ClInclude Include="..\..\..\..\..\Libs\imgui_src\imstb_truetype.h">
       <Filter>Source Files\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="ground.hpp">
+    <ClInclude Include="entity.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="map.hpp">
+    <ClInclude Include="components.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gameController.hpp">
+    <ClInclude Include="componentManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="waypoint.hpp">
+    <ClInclude Include="entityManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="enemy.hpp">
+    <ClInclude Include="systemManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="wave.hpp">
+    <ClInclude Include="system.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="componentManagerBase.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="towerRenderSystem.hpp">
+      <Filter>Header Files\system</Filter>
+    </ClInclude>
+    <ClInclude Include="archerTower.hpp">
+      <Filter>Header Files\tower</Filter>
+    </ClInclude>
+    <ClInclude Include="tower.hpp">
+      <Filter>Header Files\tower</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

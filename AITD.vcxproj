@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\Microsoft.Windows.CppWinRT.2.0.220531.1\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('packages\Microsoft.Windows.CppWinRT.2.0.220531.1\build\native\Microsoft.Windows.CppWinRT.props')" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -150,7 +151,10 @@
     <ClCompile Include="..\..\..\..\..\Libs\imgui_src\imgui_draw.cpp" />
     <ClCompile Include="..\..\..\..\..\Libs\imgui_src\imgui_tables.cpp" />
     <ClCompile Include="..\..\..\..\..\Libs\imgui_src\imgui_widgets.cpp" />
+    <ClCompile Include="archerTower.cpp" />
+    <ClCompile Include="entityManger.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="tower.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\Libs\imgui_sfml_src\imconfig-SFML.h" />
@@ -162,14 +166,29 @@
     <ClInclude Include="..\..\..\..\..\Libs\imgui_src\imstb_rectpack.h" />
     <ClInclude Include="..\..\..\..\..\Libs\imgui_src\imstb_textedit.h" />
     <ClInclude Include="..\..\..\..\..\Libs\imgui_src\imstb_truetype.h" />
-    <ClInclude Include="enemy.hpp" />
-    <ClInclude Include="gameController.hpp" />
-    <ClInclude Include="ground.hpp" />
-    <ClInclude Include="map.hpp" />
-    <ClInclude Include="wave.hpp" />
-    <ClInclude Include="waypoint.hpp" />
+    <ClInclude Include="archerTower.hpp" />
+    <ClInclude Include="componentManagerBase.hpp" />
+    <ClInclude Include="components.hpp" />
+    <ClInclude Include="componentManager.hpp" />
+    <ClInclude Include="entity.hpp" />
+    <ClInclude Include="entityManager.hpp" />
+    <ClInclude Include="system.hpp" />
+    <ClInclude Include="systemManager.hpp" />
+    <ClInclude Include="tower.hpp" />
+    <ClInclude Include="towerRenderSystem.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\Microsoft.Windows.CppWinRT.2.0.220531.1\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('packages\Microsoft.Windows.CppWinRT.2.0.220531.1\build\native\Microsoft.Windows.CppWinRT.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\Microsoft.Windows.CppWinRT.2.0.220531.1\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.Windows.CppWinRT.2.0.220531.1\build\native\Microsoft.Windows.CppWinRT.props'))" />
+    <Error Condition="!Exists('packages\Microsoft.Windows.CppWinRT.2.0.220531.1\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.Windows.CppWinRT.2.0.220531.1\build\native\Microsoft.Windows.CppWinRT.targets'))" />
+  </Target>
 </Project>
