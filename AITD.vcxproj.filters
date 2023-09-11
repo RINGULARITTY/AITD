@@ -22,6 +22,12 @@
     <Filter Include="Header Files\tower">
       <UniqueIdentifier>{fe86725d-a27a-47d1-b4d8-d56f9d11dcd4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\tile">
+      <UniqueIdentifier>{bf861127-9878-4014-bc82-7e37ca22ab3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\enemy">
+      <UniqueIdentifier>{5a4acdd9-dcdb-444c-b40b-205b2ef02bca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -109,6 +115,33 @@
     </ClInclude>
     <ClInclude Include="tower.hpp">
       <Filter>Header Files\tower</Filter>
+    </ClInclude>
+    <ClInclude Include="tile.hpp">
+      <Filter>Header Files\tile</Filter>
+    </ClInclude>
+    <ClInclude Include="spawnTile.hpp">
+      <Filter>Header Files\tile</Filter>
+    </ClInclude>
+    <ClInclude Include="endTile.hpp">
+      <Filter>Header Files\tile</Filter>
+    </ClInclude>
+    <ClInclude Include="pathTile.hpp">
+      <Filter>Header Files\tile</Filter>
+    </ClInclude>
+    <ClInclude Include="waterTile.hpp">
+      <Filter>Header Files\tile</Filter>
+    </ClInclude>
+    <ClInclude Include="towerTile.hpp">
+      <Filter>Header Files\tile</Filter>
+    </ClInclude>
+    <ClInclude Include="tileManager.hpp">
+      <Filter>Header Files\tile</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy.hpp">
+      <Filter>Header Files\enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="fishmanEnemy.hpp">
+      <Filter>Header Files\enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

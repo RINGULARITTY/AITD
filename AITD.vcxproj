@@ -170,12 +170,21 @@
     <ClInclude Include="componentManagerBase.hpp" />
     <ClInclude Include="components.hpp" />
     <ClInclude Include="componentManager.hpp" />
+    <ClInclude Include="endTile.hpp" />
+    <ClInclude Include="enemy.hpp" />
     <ClInclude Include="entity.hpp" />
     <ClInclude Include="entityManager.hpp" />
+    <ClInclude Include="fishmanEnemy.hpp" />
+    <ClInclude Include="pathTile.hpp" />
+    <ClInclude Include="spawnTile.hpp" />
     <ClInclude Include="system.hpp" />
     <ClInclude Include="systemManager.hpp" />
+    <ClInclude Include="tile.hpp" />
+    <ClInclude Include="tileManager.hpp" />
     <ClInclude Include="tower.hpp" />
     <ClInclude Include="towerRenderSystem.hpp" />
+    <ClInclude Include="towerTile.hpp" />
+    <ClInclude Include="waterTile.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

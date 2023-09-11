@@ -7,6 +7,7 @@
 #include "components.hpp"
 #include "archerTower.hpp"
 #include "towerRenderSystem.hpp"
+#include "fishmanEnemy.hpp"
 
 
 #include <SFML/Graphics/CircleShape.hpp>
@@ -20,18 +21,24 @@ int main() {
 
     EntityManager entityManager;
     ComponentManager<PositionComponent> positionComponentManager;
+    ComponentManager<LevelComponent> levelComponentManager;
     ComponentManager<DamageComponent> damageComponentManager;
     ComponentManager<RangeComponent> rangeComponentManager;
-    ComponentManager<TowerRenderComponent> renderManager;
+    ComponentManager<TowerRenderComponent> renderComponentManager;
+    ComponentManager<ConstitutionComponent> constitutionComponentManager;
+    ComponentManager<SwimComponent> swimComponentManger;
 
     ArcherTower archerTower(entityManager, positionComponentManager, damageComponentManager, rangeComponentManager);
     archerTower.InitializeTower();
+
+    FishmanEnemy fishmanEnemy(entityManager, positionComponentManager, levelComponentManager, constitutionComponentManager, swimComponentManger);
+    fishmanEnemy.InitializeComponents();
 
     sf::RenderWindow window(sf::VideoMode(1600, 900), "AITD");
     window.setFramerateLimit(60);
 
     SystemManager systemManager;
-    systemManager.AddSystem<TowerRenderSystem>(positionComponentManager, renderManager, window);
+    systemManager.AddSystem<TowerRenderSystem>(positionComponentManager, renderComponentManager, window);
 
     sf::Clock clock;
 
